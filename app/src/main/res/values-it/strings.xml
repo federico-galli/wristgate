@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">Chiamate e messaggi importanti sul tuo orologio</string>
+    <string name="section_fix">Da sistemare</string>
+    <string name="section_history">Ultimi inoltri</string>
+    <string name="section_watch">Nell\'app dell\'orologio</string>
+    <string name="test_button">Invia notifica di prova</string>
+    <string name="test_hint">Dovrebbe arrivare sull\'orologio in pochi secondi</string>
+    <string name="history_empty">Niente inoltrato finora</string>
+    <string name="clear">Cancella</string>
+    <string name="fix">Attiva</string>
+    <string name="status_almost">Quasi pronto</string>
+    <string name="status_paused">In pausa</string>
+    <string name="status_no_apps">Nessuna app selezionata</string>
+    <string name="status_active">Attivo</string>
+    <string name="status_calls">Chiamate da %s</string>
+    <string name="status_messages">Messaggi importanti da %s</string>
+    <string name="status_both">Chiamate e messaggi importanti da %s</string>
+    <string name="list_and">" e "</string>
+    <string name="check_listener_title">Accesso alle notifiche</string>
+    <string name="check_listener_sub">Per vedere chiamate e messaggi in arrivo</string>
+    <string name="check_post_title">Mostrare notifiche</string>
+    <string name="check_post_sub">Per inoltrarli all\'orologio</string>
+    <string name="check_battery_title">Batteria senza restrizioni</string>
+    <string name="check_battery_sub">Così Android non chiude Wristgate</string>
+    <string name="state_on">acceso</string>
+    <string name="state_off">spento</string>
+    <string name="rules">Regole</string>
+    <string name="rules_none">Nessuna regola: non passa niente</string>
+    <string name="ringing">Sta squillando…</string>
+    <string name="outcome_answered">Risposta</string>
+    <string name="outcome_missed">Non risposta</string>
+    <string name="reason_from">da %s</string>
+    <string name="reason_keyword">«%s»</string>
+    <string name="toast_allow_first">Prima consenti a Wristgate di mostrare notifiche</string>
+    <string name="toast_test_sent">Notifica di prova inviata</string>
+    <string name="channel_calls">Chiamate inoltrate</string>
+    <string name="channel_calls_desc">Copia delle chiamate in arrivo per l\'orologio</string>
+    <string name="channel_messages">Messaggi importanti</string>
+    <string name="channel_messages_desc">Messaggi che rispettano le tue regole</string>
+    <string name="test_title">Prova: Wristgate</string>
+    <string name="test_text">Se la vedi sull\'orologio, è tutto a posto</string>
+    <string name="unknown_caller">Sconosciuto</string>
+    <string name="incoming_call">Chiamata in arrivo</string>
+    <string name="contacts_unavailable">Rubrica non disponibile</string>
+    <string name="contact_added">Aggiunto: %s</string>
+    <string name="rules_title">Messaggi importanti</string>
+    <string name="rules_intro">All\'orologio arrivano solo i messaggi che rispettano almeno una regola. Maiuscole e accenti non contano.</string>
+    <string name="section_keywords">Se il messaggio contiene</string>
+    <string name="section_contacts">Tutti i messaggi di</string>
+    <string name="keywords_empty">Nessuna parola chiave</string>
+    <string name="contacts_empty">Nessun contatto o gruppo</string>
+    <string name="keyword_hint">es. urgente</string>
+    <string name="contact_hint">Contatto o gruppo</string>
+    <string name="add">Aggiungi</string>
+    <string name="pick_contact">Scegli dalla rubrica</string>
+    <string name="recent_label">Scritti di recente — tocca per aggiungere</string>
+    <string name="rules_footer">Il nome deve essere quello che compare nella notifica, cioè di solito come l\'hai salvato in rubrica. Funziona anche con i gruppi.\n\nIl testo dei messaggi non viene salvato: nella cronologia restano solo il mittente e il motivo dell\'inoltro.</string>
+    <plurals name="missing_permissions">
+        <item quantity="one">Manca un permesso</item>
+        <item quantity="other">Mancano %d permessi</item>
+    </plurals>
+    <plurals name="contacts_count">
+        <item quantity="one">1 contatto</item>
+        <item quantity="other">%d contatti</item>
+    </plurals>
+    <string-array name="default_keywords">
+        <item>urgente</item>
+        <item>chiamami</item>
+    </string-array>
+    <string name="section_calls_from">Chiamate da</string>
+    <string name="section_messages_from">Messaggi importanti da</string>
+    <string name="none_installed">Nessuna delle app supportate è installata</string>
+    <string name="watch_intro">Apri l\'app del tuo orologio (Garmin Connect, Zepp, Galaxy Wearable, Fitbit…) e cerca le impostazioni delle notifiche per app:</string>
+    <string name="watch_allow">✅  Attiva &lt;b&gt;Wristgate&lt;/b&gt;</string>
+    <string name="watch_turn_off">🚫  Disattiva &lt;b&gt;%s&lt;/b&gt;</string>
+    <string name="watch_outro">Le altre app lasciale come sono. All\'orologio arriveranno solo le chiamate e i messaggi importanti, una notifica chiara per ciascuno.</string>
+    <string name="about_source">Codice sorgente</string>
+</resources>

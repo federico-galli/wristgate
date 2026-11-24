@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wristgate</string>
+    <string name="tagline">Calls and important messages on your watch</string>
+    <string name="section_fix">Needs attention</string>
+    <string name="section_history">Recently forwarded</string>
+    <string name="section_watch">Watch app setup</string>
+    <string name="test_button">Send test notification</string>
+    <string name="test_hint">It should reach your watch within seconds</string>
+    <string name="history_empty">Nothing forwarded yet</string>
+    <string name="clear">Clear</string>
+    <string name="fix">Fix</string>
+    <string name="back">‹  Wristgate</string>
+    <string name="status_almost">Almost ready</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_no_apps">No apps selected</string>
+    <string name="status_active">Active</string>
+    <string name="status_calls">Calls from %s</string>
+    <string name="status_messages">Important messages from %s</string>
+    <string name="status_both">Calls and important messages from %s</string>
+    <string name="list_and">" and "</string>
+    <string name="check_listener_title">Notification access</string>
+    <string name="check_listener_sub">To see incoming calls and messages</string>
+    <string name="check_post_title">Show notifications</string>
+    <string name="check_post_sub">To forward them to your watch</string>
+    <string name="check_battery_title">Unrestricted battery</string>
+    <string name="check_battery_sub">So Android doesn\'t stop Wristgate</string>
+    <string name="state_on">on</string>
+    <string name="state_off">off</string>
+    <string name="rules">Rules</string>
+    <string name="rules_none">No rules: nothing gets through</string>
+    <string name="ringing">Ringing…</string>
+    <string name="outcome_answered">Answered</string>
+    <string name="outcome_missed">Not answered</string>
+    <string name="reason_from">from %s</string>
+    <string name="reason_keyword">“%s”</string>
+    <string name="toast_allow_first">First allow Wristgate to show notifications</string>
+    <string name="toast_test_sent">Test notification sent</string>
+    <string name="channel_calls">Forwarded calls</string>
+    <string name="channel_calls_desc">Copies of incoming calls for your watch</string>
+    <string name="channel_messages">Important messages</string>
+    <string name="channel_messages_desc">Messages that match your rules</string>
+    <string name="test_title">Test: Wristgate</string>
+    <string name="test_text">If you can see this on your watch, you\'re all set</string>
+    <string name="unknown_caller">Unknown</string>
+    <string name="incoming_call">Incoming call</string>
+    <string name="contacts_unavailable">Contacts app not available</string>
+    <string name="contact_added">Added: %s</string>
+    <string name="rules_title">Important messages</string>
+    <string name="rules_intro">Only messages that match at least one rule reach your watch. Case and accents don\'t matter.</string>
+    <string name="section_keywords">If the message contains</string>
+    <string name="section_contacts">All messages from</string>
+    <string name="keywords_empty">No keywords</string>
+    <string name="contacts_empty">No contacts or groups</string>
+    <string name="keyword_hint">e.g. urgent</string>
+    <string name="contact_hint">Contact or group</string>
+    <string name="add">Add</string>
+    <string name="pick_contact">Pick from contacts</string>
+    <string name="recent_label">Wrote to you recently — tap to add</string>
+    <string name="rules_footer">The name must match what the notification shows, which is usually how you saved it in your contacts. Groups work too.\n\nMessage text is never stored: the history only keeps the sender and why it was forwarded.</string>
+    <plurals name="missing_permissions">
+        <item quantity="one">One permission missing</item>
+        <item quantity="other">%d permissions missing</item>
+    </plurals>
+    <plurals name="contacts_count">
+        <item quantity="one">1 contact</item>
+        <item quantity="other">%d contacts</item>
+    </plurals>
+    <string-array name="default_keywords">
+        <item>urgent</item>
+        <item>call me</item>
+    </string-array>
+    <string name="section_calls_from">Calls from</string>
+    <string name="section_messages_from">Important messages from</string>
+    <string name="none_installed">None of the supported apps is installed</string>
+    <string name="watch_intro">Open your watch\'s companion app (Garmin Connect, Zepp, Galaxy Wearable, Fitbit…) and find its per-app notification settings:</string>
+    <string name="watch_allow">✅  Allow &lt;b&gt;Wristgate&lt;/b&gt;</string>
+    <string name="watch_turn_off">🚫  Turn off &lt;b&gt;%s&lt;/b&gt;</string>
+    <string name="watch_outro">Leave every other app as it is. Your watch will only get calls and important messages, one clear notification each.</string>
+    <string name="about_source">Source code</string>
+</resources>
