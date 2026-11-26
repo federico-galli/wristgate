@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wristgate · Privacy policy</title>
+<meta name="description" content="Wristgate collects no data: everything stays on your phone.">
+<link rel="icon" href="../icon.png">
+<style>
+  :root {
+    --bg: #f2f3f5; --card: #ffffff; --text: #1b1d21; --muted: #5b6270;
+    --accent: #1f8f5f; --line: #e3e6ea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1215; --card: #1a1e23; --text: #eceff3; --muted: #9aa3af; --accent: #4cc38a; --line: #2a3037; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 20px 64px; }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  header img { width: 56px; height: 56px; border-radius: 14px; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 0; }
+  .updated { color: var(--muted); margin: 4px 0 28px; font-size: 15px; }
+  .summary {
+    background: var(--card); border-radius: 20px; padding: 20px 24px; margin-bottom: 32px;
+    border-left: 5px solid var(--accent);
+  }
+  .summary p { margin: 0; font-size: 18px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 36px 0 10px; }
+  section { background: var(--card); border-radius: 20px; padding: 6px 24px; }
+  section p, section li { margin: 14px 0; }
+  ul { padding-left: 20px; }
+  a { color: var(--accent); }
+  code { font-size: 15px; background: var(--bg); padding: 1px 6px; border-radius: 6px; }
+  footer { color: var(--muted); font-size: 14px; margin-top: 40px; text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="../icon.png" alt="">
+    <h1>Wristgate privacy policy</h1>
+  </header>
+  <p class="updated">Last updated: 26 November 2026 · applies to the Wristgate Android app</p>
+
+  <div class="summary">
+    <p><strong>Wristgate collects no data.</strong> It has no internet access, so nothing it sees can leave your phone. There are no accounts, ads, analytics or trackers.</p>
+  </div>
+
+  <h2>What Wristgate reads</h2>
+  <section>
+    <p>To do its job, Wristgate needs <strong>notification access</strong>, which you grant in Android's settings. With it, Wristgate reads the notifications of the messaging apps you select (for example WhatsApp, Signal or Telegram), in order to:</p>
+    <ul>
+      <li>recognize <strong>incoming calls</strong>;</li>
+      <li>check whether a message matches <strong>your rules</strong> (keywords, or contacts and groups you chose).</li>
+    </ul>
+    <p>When it does, Wristgate posts its own notification on your phone, which your watch's companion app (Garmin Connect, Zepp, Galaxy Wearable…) forwards to your watch. What that app then does is governed by its own privacy policy.</p>
+    <p>All of this happens <strong>on your phone</strong>. Notifications from apps you didn't select are ignored.</p>
+  </section>
+
+  <h2>What Wristgate stores, on your phone only</h2>
+  <section>
+    <ul>
+      <li><strong>Your settings and rules:</strong> the apps you selected, your keywords, and the contacts and groups you added.</li>
+      <li><strong>A short history</strong> of what was forwarded, shown in the app: who called or wrote, which app, when, and why it was forwarded (last 100 items). <strong>The text of messages is never stored.</strong></li>
+      <li><strong>Recent senders:</strong> the names of up to 15 people or groups who wrote to you recently, so you can add them to your rules with one tap.</li>
+    </ul>
+    <p>This data is kept in the app's private storage. It is <strong>not included in Android backups</strong> and is not shared with anyone, including us. You can clear the history from the app at any time; uninstalling Wristgate deletes everything.</p>
+  </section>
+
+  <h2>Permissions</h2>
+  <section>
+    <ul>
+      <li><strong>Notification access</strong>: to see incoming calls and messages, as described above.</li>
+      <li><strong>Show notifications</strong>: to post the notifications your watch receives.</li>
+      <li><strong>Unrestricted battery</strong> (a setting you choose, not a permission): so Android doesn't stop Wristgate in the background.</li>
+    </ul>
+    <p>Wristgate has <strong>no internet permission</strong> and <strong>no contacts permission</strong>. <em>Pick from contacts</em> uses Android's own contact picker, which shares with Wristgate only the contact you choose, and only its name is kept.</p>
+  </section>
+
+  <h2>Children</h2>
+  <section>
+    <p>Wristgate is not directed at children and collects no personal information from anyone.</p>
+  </section>
+
+  <h2>Changes and contact</h2>
+  <section>
+    <p>If this policy changes, the new version will be published on this page with a new date. Wristgate is open source: you can check what it does in its <a href="https://github.com/federico-galli/wristgate">source code</a>.</p>
+    <p>Questions? <a href="https://github.com/federico-galli/wristgate/issues">Open an issue on GitHub</a>.</p>
+  </section>
+
+  <footer>Wristgate · made by Federico Galli · <a href="https://www.sideralis.org">Sideralis</a></footer>
+</main>
+</body>
+</html>
