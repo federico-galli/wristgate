@@ -32,7 +32,7 @@ Messaging-app calls (WhatsApp, Signal, Telegram…) are internet calls, not phon
 
 Everything else stays on your phone.
 
-A forwarded notification normally buzzes your watch only once. For calls, Wristgate re-posts its notification every 3 seconds while the phone rings (up to a minute), so your wrist keeps buzzing like it does for a real call. It stops as soon as you answer or decline.
+A forwarded notification normally buzzes your watch only once. For calls, Wristgate sends a fresh notification every 3 seconds while the phone rings (up to a minute): *📞 Mom · WhatsApp · ringing for 6 s*. Your wrist keeps buzzing like it does for a real call, and the copies disappear from the watch as soon as you answer or decline.
 
 ## How it works
 
@@ -50,11 +50,13 @@ The key idea: **in your watch's companion app, Wristgate is the only one of thes
 ## Screenshots
 
 <p align="center">
-  <img src="docs/screenshots/main.png" width="260" alt="Main screen: choose which apps forward calls and important messages">
+  <img src="docs/screenshots/main.png" width="200" alt="Home: status, last forwarded, and which apps forward calls and important messages">
   &nbsp;
-  <img src="docs/screenshots/rules.png" width="260" alt="Rules: keywords and contacts">
+  <img src="docs/screenshots/rules.png" width="200" alt="Rules: keywords and contacts">
   &nbsp;
-  <img src="docs/screenshots/main-bottom.png" width="260" alt="Test notification, history and watch setup">
+  <img src="docs/screenshots/history.png" width="200" alt="History: forwarded calls and messages, grouped by day">
+  &nbsp;
+  <img src="docs/screenshots/test.png" width="200" alt="Test on your watch: a notification or a simulated incoming call">
 </p>
 
 ## Setup
@@ -83,7 +85,7 @@ The key idea: **in your watch's companion app, Wristgate is the only one of thes
 5. **In your watch's companion app** (Garmin Connect, Zepp, Galaxy Wearable, Fitbit, Huawei Health…), open the per-app notification settings:
    - ✅ **allow Wristgate**;
    - 🚫 **turn off the apps you selected in Wristgate**, or you'll get everything twice. Leave the other apps as they are.
-6. Tap **Send test notification**. If it shows up on your watch, you're done.
+6. Open **Test on your watch**. Tap **Send test notification**: it should show up on your watch within seconds. Then tap **Simulate incoming call**: your watch should buzz every 3 seconds for 20 seconds. If both work, you're done.
 
 ## Rules for important messages
 
@@ -119,7 +121,7 @@ Any watch or band whose phone companion app lets you choose **which phone apps**
 ## Privacy
 
 - **No internet permission.** Wristgate cannot send anything anywhere; check [`AndroidManifest.xml`](app/src/main/AndroidManifest.xml).
-- **Message text is never stored.** The on-screen history keeps only the sender, the app, the time and why it was forwarded (last 30 items).
+- **Message text is never stored.** The on-screen history keeps only the sender, the app, the time and why it was forwarded (last 100 items).
 - **No contacts permission.** *Pick from contacts* uses Android's system picker, which shares only the contact you choose.
 - No ads, no analytics, no third-party libraries.
 
