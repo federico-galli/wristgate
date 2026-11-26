@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">Chiamate e messaggi importanti sul tuo orologio</string>
-    <string name="section_fix">Da sistemare</string>
     <string name="section_history">Ultimi inoltri</string>
     <string name="section_watch">Nell\'app dell\'orologio</string>
     <string name="test_button">Invia notifica di prova</string>
@@ -26,7 +25,7 @@
     <string name="check_post_title">Mostrare notifiche</string>
     <string name="check_post_sub">Per inoltrarli all\'orologio</string>
     <string name="check_battery_title">Batteria senza restrizioni</string>
-    <string name="check_battery_sub">Così Android non chiude Wristgate. Tocca, poi Batteria → Senza restrizioni</string>
+    <string name="check_battery_sub">Così Android non chiude Wristgate</string>
     <string name="state_on">acceso</string>
     <string name="state_off">spento</string>
     <string name="rules">Regole</string>
@@ -110,4 +109,8 @@
     <string name="watch_title">Configura app orologio</string>
     <string name="ring_first">%s · chiamata in arrivo</string>
     <string name="ring_later">%1$s · squilla da %2$d s</string>
+    <string name="status_missing_first">Manca: %s</string>
+    <string name="status_tap_to_fix">Tocca qui per sistemarlo</string>
+    <string name="hint_battery_page">Scegli «Senza restrizioni»</string>
+    <string name="hint_app_page">Tocca Batteria, poi scegli «Senza restrizioni»</string>
 </resources>

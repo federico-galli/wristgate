@@ -88,16 +88,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Missing permissions (hidden when all is fine) -->
-        <TextView
-            android:id="@+id/permissionsLabel"
-            style="@style/SectionLabel"
-            android:text="@string/section_fix" />
-
-        <LinearLayout
-            android:id="@+id/permissions"
-            style="@style/Card" />
-
         <!-- Calls: grid of app icons, tap to toggle -->
         <TextView
             style="@style/SectionLabel"

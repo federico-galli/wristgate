@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : Activity() {
 
@@ -39,8 +40,6 @@ class MainActivity : Activity() {
     private lateinit var statusIcon: ImageView
     private lateinit var statusTitle: TextView
     private lateinit var statusText: TextView
-    private lateinit var permissionsLabel: View
-    private lateinit var permissions: LinearLayout
     private lateinit var callsGrid: LinearLayout
     private lateinit var messagesGrid: LinearLayout
     private lateinit var messages: LinearLayout
@@ -66,8 +65,6 @@ class MainActivity : Activity() {
         statusIcon = findViewById(R.id.statusIcon)
         statusTitle = findViewById(R.id.statusTitle)
         statusText = findViewById(R.id.statusText)
-        permissionsLabel = findViewById(R.id.permissionsLabel)
-        permissions = findViewById(R.id.permissions)
         callsGrid = findViewById(R.id.callsGrid)
         messagesGrid = findViewById(R.id.messagesGrid)
         messages = findViewById(R.id.messages)
@@ -75,7 +72,7 @@ class MainActivity : Activity() {
         more = findViewById(R.id.more)
 
         // Cards clip their rows' ripple to the rounded corners.
-        listOf(permissions, callsGrid, messages, more).forEach { it.clipToOutline = true }
+        listOf(callsGrid, messages, more).forEach { it.clipToOutline = true }
 
         renderAbout()
     }
@@ -117,13 +114,32 @@ class MainActivity : Activity() {
                 }
             },
             Check(getString(R.string.check_battery_title), getString(R.string.check_battery_sub), batteryOk) {
-                startActivity(
-                    // The app's info page (Battery → Unrestricted): asking for the exemption directly needs
-                    // REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, which Google Play allows only for a few kinds of apps.
-                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
-                )
+                openBatterySettings()
             },
         )
+    }
+
+    /**
+     * Straight to Wristgate's battery page (Unrestricted / Optimized / Restricted) where the phone has it,
+     * otherwise the app's info page (Battery → Unrestricted). Asking for the exemption directly would need
+     * REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, which Google Play allows only for a few kinds of apps.
+     * The battery page's action isn't public API, but the system Settings app exports it (checked on Samsung).
+     */
+    private fun openBatterySettings() {
+        val pkg = Uri.parse("package:$packageName")
+        // Highlighting isn't reliable across phones, so a toast also says what to tap.
+        val hint = try {
+            startActivity(
+                Intent("android.settings.VIEW_ADVANCED_POWER_USAGE_DETAIL", pkg)
+                    // Asks Settings to highlight the option. Stock Android may honour it; Samsung ignores it.
+                    .putExtra(":settings:fragment_args_key", "unrestricted_pref")
+            )
+            R.string.hint_battery_page
+        } catch (e: RuntimeException) { // ActivityNotFoundException, SecurityException
+            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, pkg))
+            R.string.hint_app_page
+        }
+        Toast.makeText(this, hint, Toast.LENGTH_LONG).show()
     }
 
     private fun openNotificationSettings() = startActivity(
@@ -147,7 +163,11 @@ class MainActivity : Activity() {
         when {
             missing.isNotEmpty() -> {
                 statusTitle.text = getString(R.string.status_almost)
-                statusText.text = resources.getQuantityString(R.plurals.missing_permissions, missing.size, missing.size)
+                // Say what's missing first: tapping the card opens exactly that setting.
+                statusText.text = getString(R.string.status_missing_first, missing.first().title) + "\n" +
+                    missing.first().subtitle + "\n" +
+                    (if (missing.size > 1) resources.getQuantityString(R.plurals.missing_permissions, missing.size, missing.size) + " · " else "") +
+                    getString(R.string.status_tap_to_fix)
             }
             enabled.isEmpty() -> {
                 statusTitle.text = getString(R.string.status_paused)
@@ -164,21 +184,14 @@ class MainActivity : Activity() {
                 }
             }
         }
+        // The card is what people tap: when something is missing, it opens the first fix.
+        statusCard.isClickable = missing.isNotEmpty()
+        statusCard.clipToOutline = true // keep the press highlight inside the rounded corners
+        statusCard.foreground = if (missing.isNotEmpty()) getDrawable(android.R.drawable.list_selector_background) else null
+        if (missing.isNotEmpty()) statusCard.setOnClickListener { missing.first().fix() } else statusCard.setOnClickListener(null)
         statusCard.backgroundTintList = ColorStateList.valueOf(getColor(if (ok) R.color.ok_container else R.color.warn_container))
         statusIcon.backgroundTintList = ColorStateList.valueOf(getColor(if (ok) R.color.accent else R.color.warn))
         statusIcon.setImageResource(if (ok) R.drawable.ic_check else R.drawable.ic_warning)
-
-        permissions.removeAllViews()
-        missing.forEach { c ->
-            val row = inflate(R.layout.item_permission, permissions)
-            row.findViewById<TextView>(R.id.title).text = c.title
-            row.findViewById<TextView>(R.id.subtitle).text = c.subtitle
-            row.setOnClickListener { c.fix() }
-            permissions.addView(row)
-        }
-        val vis = if (missing.isEmpty()) View.GONE else View.VISIBLE
-        permissionsLabel.visibility = vis
-        permissions.visibility = vis
     }
 
     // ---------------------------------------------------------------- source apps

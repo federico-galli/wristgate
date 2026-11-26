@@ -77,7 +77,7 @@ The key idea: **in your watch's companion app, Wristgate is the only one of thes
 2. **Open Wristgate and grant the three permissions** it asks for:
    - *Notification access*, to see incoming calls and messages;
    - *Show notifications*, to post the copies your watch will receive;
-   - *Unrestricted battery*, so Android doesn't stop it in the background (Wristgate opens the app's settings page: tap **Battery → Unrestricted**).
+   - *Unrestricted battery*, so Android doesn't stop it in the background (tap it, then choose **Unrestricted**).
 
    > On Android 13+, apps installed outside an app store get *notification access* greyed out. Go to **Settings → Apps → Wristgate → ⋮ → Allow restricted settings**, then try again.
 3. **Pick your apps.** Tap the icons under *Calls from* and *Important messages from*: colored with a ✓ means on.

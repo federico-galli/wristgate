@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Wristgate</string>
     <string name="tagline">Calls and important messages on your watch</string>
-    <string name="section_fix">Needs attention</string>
     <string name="section_history">Recently forwarded</string>
     <string name="section_watch">Watch app setup</string>
     <string name="test_button">Send test notification</string>
@@ -28,7 +27,7 @@
     <string name="check_post_title">Show notifications</string>
     <string name="check_post_sub">To forward them to your watch</string>
     <string name="check_battery_title">Unrestricted battery</string>
-    <string name="check_battery_sub">So Android doesn\'t stop Wristgate. Tap, then Battery → Unrestricted</string>
+    <string name="check_battery_sub">So Android doesn\'t stop Wristgate</string>
     <string name="state_on">on</string>
     <string name="state_off">off</string>
     <string name="rules">Rules</string>
@@ -112,4 +111,8 @@
     <string name="watch_title">Watch app setup</string>
     <string name="ring_first">%s · incoming call</string>
     <string name="ring_later">%1$s · ringing for %2$d s</string>
+    <string name="status_missing_first">Missing: %s</string>
+    <string name="status_tap_to_fix">Tap here to fix it</string>
+    <string name="hint_battery_page">Choose “Unrestricted”</string>
+    <string name="hint_app_page">Tap Battery, then choose “Unrestricted”</string>
 </resources>
