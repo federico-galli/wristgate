@@ -7,9 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 
 /**
@@ -23,11 +20,6 @@ class WristgateService : NotificationListenerService() {
     companion object {
         private const val TAG = "Wristgate"
         private const val CALL_STYLE = "android.app.Notification\$CallStyle"
-
-        /** While a call rings, buzz the watch again this often… */
-        private const val REPEAT_EVERY_MS = 3_000L
-        /** …for at most this long (safety net if the end of the call is never seen). */
-        private const val REPEAT_FOR_MS = 60_000L
     }
 
     private data class Msg(val sender: String, val text: String, val time: Long)
@@ -35,12 +27,8 @@ class WristgateService : NotificationListenerService() {
     private val nm by lazy { getSystemService(NotificationManager::class.java) }
     private val store by lazy { Store(this) }
 
-    /** source notification key -> history entry id, for calls that are ringing */
+    /** source notification key -> history entry id, for calls that are ringing (the buzzing is Ringer's job) */
     private val ringing = mutableMapOf<String, String>()
-
-    /** source notification key -> pending "buzz again" task for a ringing call */
-    private val repeaters = mutableMapOf<String, Runnable>()
-    private val handler by lazy { Handler(Looper.getMainLooper()) }
 
     /** source notification key -> timestamp of the newest message already examined */
     private val lastSeen = mutableMapOf<String, Long>()
@@ -71,7 +59,10 @@ class WristgateService : NotificationListenerService() {
         when {
             isIncomingCall(sbn) -> onIncomingCall(sbn, source)
             // Same notification updated to "call in progress": you answered.
-            sbn.key in ringing || n.category == Notification.CATEGORY_CALL -> endCall(sbn, Store.OUTCOME_ANSWERED)
+            sbn.key in ringing && isOngoingCall(sbn) -> endCall(sbn, Store.OUTCOME_ANSWERED)
+            // Any other update of a ringing call (or another call notification): not a message, keep ringing.
+            sbn.key in ringing || n.category == Notification.CATEGORY_CALL ->
+                Log.d(TAG, "call update ignored key=${sbn.key}")
             else -> onMessage(sbn, source)
         }
     }
@@ -101,56 +92,42 @@ class WristgateService : NotificationListenerService() {
         return n.category == Notification.CATEGORY_CALL && n.fullScreenIntent != null
     }
 
-    /** Stable id per source notification, so updates and removals line up. */
-    private fun bridgeId(sbn: StatusBarNotification) = sbn.key.hashCode()
+    /** The call notification now says "call in progress" (you answered), not "incoming". */
+    private fun isOngoingCall(sbn: StatusBarNotification): Boolean {
+        val n = sbn.notification
+        val extras = n.extras
+        if (Build.VERSION.SDK_INT >= 31 && extras.getString(Notification.EXTRA_TEMPLATE) == CALL_STYLE) {
+            return extras.getInt(Notification.EXTRA_CALL_TYPE) == Notification.CallStyle.CALL_TYPE_ONGOING
+        }
+        return n.category == Notification.CATEGORY_CALL && n.fullScreenIntent == null && sbn.isOngoing
+    }
 
     private fun onIncomingCall(sbn: StatusBarNotification, source: Source) {
         if (!store.callsEnabled(source)) return
 
         val extras = sbn.notification.extras
         val caller = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: getString(R.string.unknown_caller)
-        val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: getString(R.string.incoming_call)
+        // The caller first: it's what you look at on the watch. The app goes in the text ("WhatsApp · incoming call").
+        val title = "📞 $caller"
 
-        val title = "📞 ${source.label}: $caller"
-        val id = bridgeId(sbn)
-        val firstTime = sbn.key !in ringing
-        // First post alerts; the app's later updates of the same ringing call don't.
-        Bridge.post(this, id, title, text, alert = firstTime)
-
-        if (firstTime) {
-            val entry = "${sbn.key}@${sbn.postTime}"
-            ringing[sbn.key] = entry
-            store.addCall(Store.Call(entry, System.currentTimeMillis(), source.id, caller))
-            startRepeating(sbn.key, id, title, text)
+        if (sbn.key in ringing) {
+            // The app updated its ringing notification: new name from the next buzz, no extra buzz now.
+            Ringer.update(sbn.key, title)
+            return
         }
-    }
 
-    /**
-     * A forwarded notification buzzes the watch once; a real call keeps buzzing.
-     * So while the call rings, remove and re-post our copy every few seconds: the watch buzzes again,
-     * and there is always only one Wristgate notification on it.
-     */
-    private fun startRepeating(key: String, id: Int, title: String, text: String) {
-        val until = SystemClock.elapsedRealtime() + REPEAT_FOR_MS
-        val task = object : Runnable {
-            override fun run() {
-                if (key !in ringing || SystemClock.elapsedRealtime() > until) {
-                    repeaters.remove(key)
-                    return
-                }
-                nm.cancel(id)
-                Bridge.post(this@WristgateService, id, title, text, alert = true)
-                handler.postDelayed(this, REPEAT_EVERY_MS)
-            }
-        }
-        repeaters[key] = task
-        handler.postDelayed(task, REPEAT_EVERY_MS)
+        val entry = "${sbn.key}@${sbn.postTime}"
+        ringing[sbn.key] = entry
+        Log.d(TAG, "call ringing from ${source.label} key=${sbn.key}")
+        Ringer.start(this, sbn.key, title, source.label)
+        store.addCall(Store.Call(entry, System.currentTimeMillis(), source.id, caller))
     }
 
     private fun endCall(sbn: StatusBarNotification, outcome: String) {
-        repeaters.remove(sbn.key)?.let { handler.removeCallbacks(it) }
-        nm.cancel(bridgeId(sbn))
-        ringing.remove(sbn.key)?.let { store.setOutcome(it, outcome) }
+        val entry = ringing.remove(sbn.key) ?: return
+        Ringer.stop(this, sbn.key)
+        store.setOutcome(entry, outcome)
+        Log.d(TAG, "call ended ($outcome) key=${sbn.key}")
     }
 
     // ---------------------------------------------------------------- important messages

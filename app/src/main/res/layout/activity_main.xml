@@ -73,6 +73,18 @@
                     android:layout_marginTop="2dp"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
+
+                <!-- Last forwarded call or message: shows at a glance that it works -->
+                <TextView
+                    android:id="@+id/statusLast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/text"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -116,85 +128,11 @@
                 android:padding="10dp" />
         </LinearLayout>
 
-        <!-- Test -->
-        <TextView
-            android:id="@+id/testButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_button"
-            android:gravity="center"
-            android:text="@string/test_button"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/test_hint"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
-
-        <!-- History -->
+        <!-- History, test, watch app setup: each on its own screen -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="0dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
-                android:layout_weight="1"
-                android:text="@string/section_history" />
-
-            <TextView
-                android:id="@+id/clearHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                android:text="@string/clear"
-                android:textColor="@color/accent"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/history"
-            style="@style/Card">
-
-            <TextView
-                android:id="@+id/historyEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="18dp"
-                android:text="@string/history_empty"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <!-- Watch app setup -->
-        <TextView
-            style="@style/SectionLabel"
-            android:text="@string/section_watch" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
-            android:lineSpacingExtra="3dp"
-            android:padding="18dp"
-            android:id="@+id/watchSetup"
-            android:textColor="@color/text"
-            android:textSize="14sp" />
+            android:id="@+id/more"
+            style="@style/Card"
+            android:layout_marginTop="24dp" />
 
         <!-- About: version, source code, author's site (opened in the browser: no internet permission needed) -->
         <TextView

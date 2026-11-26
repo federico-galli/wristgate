@@ -9,7 +9,7 @@ class Store(private val context: Context) {
 
     companion object {
         const val KEY_HISTORY = "history"
-        private const val MAX_HISTORY = 30
+        private const val MAX_HISTORY = 100
         private const val MAX_RECENT_SENDERS = 15
 
         // History outcomes are stored as codes and localized only when displayed.

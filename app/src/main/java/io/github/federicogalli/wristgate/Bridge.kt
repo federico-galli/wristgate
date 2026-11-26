@@ -53,7 +53,9 @@ object Bridge {
             .setContentTitle(title)
             .setContentText(text)
             .setStyle(Notification.BigTextStyle().bigText(text))
-            .setCategory(Notification.CATEGORY_MESSAGE) // so watches don't treat it as a system "call"
+            // Not CATEGORY_CALL, so watches don't treat it as a system "call".
+            // On a Garmin Forerunner 265 the call category made no difference to the buzz (tested).
+            .setCategory(Notification.CATEGORY_MESSAGE)
             .setOnlyAlertOnce(onlyOnce)                // ringing calls update their notification many times
             .setAutoCancel(true)
             .setTimeoutAfter(timeoutMs)                // safety net: it goes away anyway

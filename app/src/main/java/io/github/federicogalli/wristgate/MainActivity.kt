@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,7 +24,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : Activity() {
 
@@ -46,13 +44,15 @@ class MainActivity : Activity() {
     private lateinit var callsGrid: LinearLayout
     private lateinit var messagesGrid: LinearLayout
     private lateinit var messages: LinearLayout
-    private lateinit var history: LinearLayout
-    private lateinit var historyEmpty: View
-    private lateinit var clearHistory: View
+    private lateinit var statusLast: TextView
+    private lateinit var more: LinearLayout
 
-    /** Refreshes the history live while the app is open. */
+    /** Refreshes the "last forwarded" line and the history count live while the app is open. */
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        if (key == Store.KEY_HISTORY) renderHistory()
+        if (key == Store.KEY_HISTORY) {
+            renderLast()
+            renderMore()
+        }
     }
 
     private data class Check(val title: String, val subtitle: String, val ok: Boolean, val fix: () -> Unit)
@@ -70,15 +70,12 @@ class MainActivity : Activity() {
         callsGrid = findViewById(R.id.callsGrid)
         messagesGrid = findViewById(R.id.messagesGrid)
         messages = findViewById(R.id.messages)
-        history = findViewById(R.id.history)
-        historyEmpty = findViewById(R.id.historyEmpty)
-        clearHistory = findViewById(R.id.clearHistory)
+        statusLast = findViewById(R.id.statusLast)
+        more = findViewById(R.id.more)
 
         // Cards clip their rows' ripple to the rounded corners.
-        listOf(permissions, callsGrid, messages, history).forEach { it.clipToOutline = true }
+        listOf(permissions, callsGrid, messages, more).forEach { it.clipToOutline = true }
 
-        findViewById<View>(R.id.testButton).setOnClickListener { sendTest() }
-        clearHistory.setOnClickListener { store.clearHistory() }
         renderAbout()
     }
 
@@ -87,7 +84,8 @@ class MainActivity : Activity() {
         renderGrids()
         renderMessages()
         renderStatus()
-        renderHistory()
+        renderLast()
+        renderMore()
         store.prefs.registerOnSharedPreferenceChangeListener(prefsListener)
     }
 
@@ -137,12 +135,10 @@ class MainActivity : Activity() {
 
     private fun renderStatus() {
         val missing = checks().filterNot { it.ok }
-        val installed = Sources.ALL.filter { installedPackage(it) != null }
+        val installed = installedSources()
         val callApps = installed.filter { store.callsEnabled(it) }.map { it.label }
         val messageApps = installed.filter { store.messagesEnabled(it) }.map { it.label }
         val enabled = (callApps + messageApps).distinct()
-
-        renderWatchSetup(installed.filter { store.callsEnabled(it) || store.messagesEnabled(it) }.map { it.label })
 
         val ok = missing.isEmpty() && enabled.isNotEmpty()
         when {
@@ -182,37 +178,10 @@ class MainActivity : Activity() {
         permissions.visibility = vis
     }
 
-    /** Watch-app instructions that name exactly the apps to turn off, based on the current selection. */
-    private fun renderWatchSetup(apps: List<String>) {
-        val html = buildString {
-            append(TextUtils.htmlEncode(getString(R.string.watch_intro)))
-            append("<br><br>").append(getString(R.string.watch_allow))
-            if (apps.isNotEmpty()) {
-                append("<br>").append(getString(R.string.watch_turn_off, TextUtils.htmlEncode(joinList(apps))))
-            }
-            append("<br><br>").append(TextUtils.htmlEncode(getString(R.string.watch_outro)))
-        }
-        findViewById<TextView>(R.id.watchSetup).text = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
-    }
-
     // ---------------------------------------------------------------- source apps
 
-    private fun installedPackage(s: Source): String? = s.packages.firstOrNull {
-        try {
-            packageManager.getApplicationInfo(it, 0); true
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
-        }
-    }
-
-    private fun iconFor(s: Source?): Drawable {
-        val pkg = s?.let { installedPackage(it) }
-        if (pkg != null) return packageManager.getApplicationIcon(pkg)
-        return getDrawable(R.drawable.ic_call)!!.mutate().apply { setTint(getColor(R.color.text_secondary)) }
-    }
-
     private fun renderGrids() {
-        val installed = Sources.ALL.filter { installedPackage(it) != null }
+        val installed = installedSources()
         fillGrid(callsGrid, installed.filter { it.calls }, store::callsEnabled, store::setCalls)
         fillGrid(messagesGrid, installed, store::messagesEnabled, store::setMessages)
     }
@@ -298,41 +267,35 @@ class MainActivity : Activity() {
         }
     }
 
-    // ---------------------------------------------------------------- history
+    // ---------------------------------------------------------------- last forwarded, other screens
 
-    private fun renderHistory() {
-        val calls = store.history()
-        // Keep only the "empty" text, drop the previous rows.
-        while (history.childCount > 1) history.removeViewAt(1)
-        historyEmpty.visibility = if (calls.isEmpty()) View.VISIBLE else View.GONE
-        clearHistory.visibility = if (calls.isEmpty()) View.INVISIBLE else View.VISIBLE
-
-        val now = System.currentTimeMillis()
-        calls.take(10).forEach { c ->
-            val source = Sources.byId(c.sourceId)
-            val row = inflate(R.layout.item_history, history)
-            row.findViewById<ImageView>(R.id.icon).setImageDrawable(iconFor(source))
-            val isMessage = c.kind == KIND_MESSAGE
-            row.findViewById<TextView>(R.id.title).text = (if (isMessage) "💬  " else "📞  ") + c.caller
-
-            val outcome = describeOutcome(c.outcome)
-                ?: if (!isMessage && now - c.time < 90_000) getString(R.string.ringing) else null
-            val whenText = DateUtils.getRelativeTimeSpanString(c.time, now, DateUtils.MINUTE_IN_MILLIS)
-            row.findViewById<TextView>(R.id.subtitle).text =
-                listOfNotNull(source?.label, whenText, outcome).joinToString(" · ")
-            history.addView(row)
-        }
+    /** "Last: 📞 Mom · 2 min ago" in the status card. */
+    private fun renderLast() {
+        val last = store.history().firstOrNull()
+        statusLast.visibility = if (last == null) View.GONE else View.VISIBLE
+        if (last == null) return
+        val whenText = DateUtils.getRelativeTimeSpanString(last.time, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+        statusLast.text = getString(R.string.status_last, last.label().replace("  ", " "), whenText)
     }
 
-    // ---------------------------------------------------------------- test
-
-    private fun sendTest() {
-        if (!getSystemService(NotificationManager::class.java).areNotificationsEnabled()) {
-            Toast.makeText(this, R.string.toast_allow_first, Toast.LENGTH_LONG).show()
-            return
+    private fun renderMore() {
+        more.removeAllViews()
+        val history = store.history()
+        val today = history.count { DateUtils.isToday(it.time) }
+        val historySub = when {
+            history.isEmpty() -> getString(R.string.history_empty)
+            today == 0 -> getString(R.string.history_none_today)
+            else -> resources.getQuantityString(R.plurals.history_today, today, today)
         }
-        Bridge.postTest(this)
-        Toast.makeText(this, R.string.toast_test_sent, Toast.LENGTH_SHORT).show()
+        more.addView(linkRow(more, getString(R.string.more_history), historySub) {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        })
+        more.addView(linkRow(more, getString(R.string.more_test), getString(R.string.more_test_sub)) {
+            startActivity(Intent(this, TestActivity::class.java))
+        })
+        more.addView(linkRow(more, getString(R.string.more_watch), getString(R.string.more_watch_sub)) {
+            startActivity(Intent(this, WatchSetupActivity::class.java))
+        })
     }
 
     // ---------------------------------------------------------------- about
@@ -351,22 +314,5 @@ class MainActivity : Activity() {
 
     // ---------------------------------------------------------------- utilities
 
-    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
-
     private fun inflate(layout: Int, parent: ViewGroup): View = layoutInflater.inflate(layout, parent, false)
-
-    /** "A, B and C", with the "and" in the phone's language. */
-    private fun joinList(items: List<String>) =
-        if (items.size <= 1) items.joinToString()
-        else items.dropLast(1).joinToString(", ") + getString(R.string.list_and) + items.last()
-
-    /** Turns a stored outcome code into text in the phone's language. */
-    private fun describeOutcome(code: String?): String? = when {
-        code == null -> null
-        code == Store.OUTCOME_ANSWERED -> getString(R.string.outcome_answered)
-        code == Store.OUTCOME_MISSED -> getString(R.string.outcome_missed)
-        code.startsWith(Store.REASON_FROM) -> getString(R.string.reason_from, code.removePrefix(Store.REASON_FROM))
-        code.startsWith(Store.REASON_KEYWORD) -> getString(R.string.reason_keyword, code.removePrefix(Store.REASON_KEYWORD))
-        else -> code
-    }
 }
