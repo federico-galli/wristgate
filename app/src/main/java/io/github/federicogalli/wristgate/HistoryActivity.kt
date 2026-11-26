@@ -31,6 +31,7 @@ class HistoryActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
+        edgeToEdge()
 
         days = findViewById(R.id.days)
         empty = findViewById(R.id.historyEmpty)

@@ -13,6 +13,7 @@ class TestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
+        edgeToEdge()
 
         findViewById<View>(R.id.back).setOnClickListener { finish() }
 

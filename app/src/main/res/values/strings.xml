@@ -28,7 +28,7 @@
     <string name="check_post_title">Show notifications</string>
     <string name="check_post_sub">To forward them to your watch</string>
     <string name="check_battery_title">Unrestricted battery</string>
-    <string name="check_battery_sub">So Android doesn\'t stop Wristgate</string>
+    <string name="check_battery_sub">So Android doesn\'t stop Wristgate. Tap, then Battery → Unrestricted</string>
     <string name="state_on">on</string>
     <string name="state_off">off</string>
     <string name="rules">Rules</string>

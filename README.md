@@ -77,7 +77,7 @@ The key idea: **in your watch's companion app, Wristgate is the only one of thes
 2. **Open Wristgate and grant the three permissions** it asks for:
    - *Notification access*, to see incoming calls and messages;
    - *Show notifications*, to post the copies your watch will receive;
-   - *Unrestricted battery*, so Android doesn't stop it in the background.
+   - *Unrestricted battery*, so Android doesn't stop it in the background (Wristgate opens the app's settings page: tap **Battery → Unrestricted**).
 
    > On Android 13+, apps installed outside an app store get *notification access* greyed out. Go to **Settings → Apps → Wristgate → ⋮ → Allow restricted settings**, then try again.
 3. **Pick your apps.** Tap the icons under *Calls from* and *Important messages from*: colored with a ✓ means on.
@@ -136,7 +136,7 @@ Any watch or band whose phone companion app lets you choose **which phone apps**
 
 ## Build from source
 
-Requirements: JDK 17+ and the Android SDK (platform 34). Android Studio is not needed.
+Requirements: JDK 17+ and the Android SDK (platform 36). Android Studio is not needed.
 
 ```bash
 ./gradlew assembleDebug
@@ -147,7 +147,7 @@ The app has no third-party dependencies, only Android system APIs. For debugging
 
 ## Languages
 
-English and Italian. On Android 13+ you can pick the language per app in system settings. Translations are welcome: copy `app/src/main/res/values/strings.xml` into `values-<language>/` and translate it.
+The app is in English. The only translation so far is Italian, used when your phone is set to Italian. On Android 13+ you can pick the language per app in system settings. Translations are welcome: copy `app/src/main/res/values/strings.xml` into `values-<language>/` and translate it.
 
 ## License
 

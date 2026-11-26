@@ -5,9 +5,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -88,3 +90,23 @@ fun Activity.canNotify(): Boolean {
 }
 
 fun Context.dp(v: Int) = (v * resources.displayMetrics.density).toInt()
+
+/**
+ * Draws the screen edge to edge and keeps its content clear of the status bar, the navigation bar,
+ * camera cutouts and the keyboard. Android 15+ forces edge to edge on apps targeting it; doing it from
+ * Android 11 makes every phone behave the same (and testable on older ones). Older versions keep the
+ * classic layout. Call after setContentView.
+ */
+fun Activity.edgeToEdge() {
+    if (Build.VERSION.SDK_INT < 30) return
+    window.setDecorFitsSystemWindows(false)
+    val root = findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
+    val (l, t, r, b) = listOf(root.paddingLeft, root.paddingTop, root.paddingRight, root.paddingBottom)
+    root.setOnApplyWindowInsetsListener { v, insets ->
+        val bars = insets.getInsets(
+            WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout() or WindowInsets.Type.ime()
+        )
+        v.setPadding(l + bars.left, t + bars.top, r + bars.right, b + bars.bottom)
+        insets
+    }
+}

@@ -17,6 +17,7 @@ class WatchSetupActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_watch)
+        edgeToEdge()
         findViewById<View>(R.id.back).setOnClickListener { finish() }
 
         val links = findViewById<LinearLayout>(R.id.links)

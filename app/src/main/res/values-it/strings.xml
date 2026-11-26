@@ -26,7 +26,7 @@
     <string name="check_post_title">Mostrare notifiche</string>
     <string name="check_post_sub">Per inoltrarli all\'orologio</string>
     <string name="check_battery_title">Batteria senza restrizioni</string>
-    <string name="check_battery_sub">Così Android non chiude Wristgate</string>
+    <string name="check_battery_sub">Così Android non chiude Wristgate. Tocca, poi Batteria → Senza restrizioni</string>
     <string name="state_on">acceso</string>
     <string name="state_off">spento</string>
     <string name="rules">Regole</string>

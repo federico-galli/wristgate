@@ -60,6 +60,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        edgeToEdge()
 
         statusCard = findViewById(R.id.statusCard)
         statusIcon = findViewById(R.id.statusIcon)
@@ -117,7 +118,9 @@ class MainActivity : Activity() {
             },
             Check(getString(R.string.check_battery_title), getString(R.string.check_battery_sub), batteryOk) {
                 startActivity(
-                    Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))
+                    // The app's info page (Battery → Unrestricted): asking for the exemption directly needs
+                    // REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, which Google Play allows only for a few kinds of apps.
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
                 )
             },
         )
